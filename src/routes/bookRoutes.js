@@ -1,42 +1,41 @@
 var express = require('express');
-
 var bookRouter = express.Router();
+var sql = require('mssql');
 
 var router = function(nav) {
-    var books = [{
-        title: 'Enders Shadow',
-        genre: 'Sci-Fi',
-        author: 'Orson Scott Card',
-        read: true
-    }, {
-        title: 'Shadow of the Giant',
-        genre: 'Sci-Fi',
-        author: 'Orson Scott Card',
-        read: false
-    }, {
-        title: 'The Lord of the Rings: The Fellowship of the Ring',
-        genre: 'Fantasy',
-        author: 'J.R.R. Tolkien',
-        read: false
-    }];
-
     bookRouter.route('/')
         .get(function(req, res) {
-            res.render('bookListView', {
-                title: 'Books',
-                nav: nav,
-                books: books
-            });
+            var request = new sql.Request();
+
+            request.query('select * from books',
+                function(err, recordset) {
+                    res.render('bookListView', {
+                        title: 'Books',
+                        nav: nav,
+                        books: recordset
+                    });
+                });
         });
 
     bookRouter.route('/:id')
         .get(function(req, res) {
             var id = req.params.id;
-            res.render('bookView', {
-                title: 'Books',
-                nav: nav,
-                book: books[id]
-            });
+            var ps = new sql.PreparedStatement();
+            ps.input('id', sql.Int);
+            ps.prepare('select * from books where id = @id',
+                function(err) {
+                    ps.execute({
+                            id: req.params.id
+                        },
+                        function(err, recordset) {
+                            res.render('bookView', {
+                                title: 'Books',
+                                nav: nav,
+                                book: recordset[0]
+                            });
+                        });
+                });
+
         });
 
     return bookRouter;

@@ -4,6 +4,7 @@ var jscs = require('gulp-jscs');
 var nodemon = require('gulp-nodemon');
 
 var jsFiles = ['*.js', 'src/**/*.js'];
+var ejsFiles = ['src/**/*.ejs'];
 
 gulp.task('style', function() {
     return gulp.src(jsFiles)
