@@ -13,8 +13,6 @@
     "dotenv": "^2.0.0",
     "ejs": "^2.4.2",
     "express": "^4.14.0",
-    "express-handlebars": "^2.0.1",
-    "jade": "^1.11.0",
     "mssql": "^3.3.0"
   },
   "devDependencies": {
