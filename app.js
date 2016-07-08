@@ -1,27 +1,11 @@
 require('dotenv');
 var express = require('express');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var passport = require('passport');
+var session = require('express-session');
 
 var app = express();
-
-var sql = require('mssql');
-
-var sqlConfig = {
-    user: process.env.MSSQL_USER,
-    password: process.env.MSSQL_PASSWORD,
-    server: process.env.MSSQL_HOST,
-    database: process.env.MSSQL_DB,
-
-    options: {
-        encrypt: true
-    }
-};
-
-sql.connect(sqlConfig, function(err) {});
-
-sql.on('error', function(err) {
-    console.log(err);
-});
 
 var port = process.env.PORT || 5000;
 var nav = [{
@@ -37,12 +21,13 @@ var authRouter = require('./src/routes/authRoutes')(nav);
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
+app.use(session({secret: 'library'}));
+require('./src/config/passport')(app);
 
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
-
-var bookRouter = require('./src/routes/bookRoutes')(nav);
 app.use('/books', bookRouter);
 app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
