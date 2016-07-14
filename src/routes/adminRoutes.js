@@ -6,16 +6,19 @@ var books = [{
     title: 'Enders Shadow',
     genre: 'Sci-Fi',
     author: 'Orson Scott Card',
+    bookId: 9532,
     read: true
 }, {
     title: 'Enders Game',
     genre: 'Sci-Fi',
     author: 'Orson Scott Card',
+    bookId: 375802,
     read: true
 }, {
     title: 'Shadow of the Giant',
     genre: 'Sci-Fi',
     author: 'Orson Scott Card',
+    bookId: 8647,
     read: false
 }, {
     title: 'The Lord of the Rings: The Fellowship of the Ring',
